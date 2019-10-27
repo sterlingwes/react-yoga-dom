@@ -1,5 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`createYogaNodes should account for margin values in layout 1`] = `
+Array [
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 21,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 42,
+    "width": 500,
+  },
+]
+`;
+
+exports[`createYogaNodes should allow for absolute positioning 1`] = `
+Array [
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 1,
+    "width": 0,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 1,
+    "width": 0,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 1,
+    "width": 0,
+  },
+]
+`;
+
 exports[`createYogaNodes should offset children with absolute top 1`] = `
 Array [
   Layout {
@@ -24,6 +82,35 @@ Array [
     "left": 0,
     "right": 0,
     "top": 40,
+    "width": 500,
+  },
+]
+`;
+
+exports[`createYogaNodes should position relative by default 1`] = `
+Array [
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 1,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 21,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 1,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 41,
     "width": 500,
   },
 ]

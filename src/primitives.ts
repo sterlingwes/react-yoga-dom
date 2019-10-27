@@ -52,9 +52,12 @@ export enum PositionValue {
   relative = 'relative',
 }
 
+type LayoutPositionT = ReturnType<typeof LayoutPosition>;
+
 export type LayoutValue = number | string;
 
 // ltr / rtl props not implemented; here for reference
+// also not supporting percentage (string) dimension values yet
 export interface RNStyleT {
   alignContent?: FlexJustifyValue;
   alignItems?: FlexAlignValue;
@@ -67,7 +70,7 @@ export interface RNStyleT {
   borderStartWidth?: number;
   borderTopWidth?: number;
   borderWidth?: number;
-  bottom?: LayoutValue;
+  bottom?: number;
   direction?: LayoutDirection;
   display?: FlexDisplay;
   end?: LayoutValue;
@@ -79,12 +82,13 @@ export interface RNStyleT {
   flexWrap?: FlexWrap;
   height?: string | number;
   justifyContent?: FlexJustifyValue;
-  left?: LayoutValue;
+  left?: number;
   margin?: LayoutValue;
   marginBottom?: LayoutValue;
   marginEnd?: LayoutValue;
   marginHorizontal?: LayoutValue;
   marginLeft?: LayoutValue;
+  marginRight?: LayoutValue;
   marginStart?: LayoutValue;
   marginTop?: LayoutValue;
   marginVertical?: LayoutValue;
@@ -103,9 +107,9 @@ export interface RNStyleT {
   paddingTop?: LayoutValue;
   paddingVertical?: LayoutValue;
   position?: PositionValue;
-  right?: LayoutValue;
+  right?: number;
   start?: LayoutValue;
-  top?: LayoutValue;
+  top?: number;
   width?: LayoutValue;
   zIndex?: number;
 }
@@ -217,7 +221,7 @@ const convertFlexDirection = (style: RNStyleT) => {
   }
 };
 
-const convertPosition = (style: RNStyleT) => {
+const convertPositionType = (style: RNStyleT) => {
   const { position } = style;
   switch (position) {
     case undefined:
@@ -248,6 +252,71 @@ const convertFlexWrap = (style: RNStyleT) => {
   }
 };
 
+const convertBordersToPosition = (style: RNStyleT): LayoutPositionT => {
+  const {
+    borderBottomWidth,
+    borderLeftWidth,
+    borderRightWidth,
+    borderTopWidth,
+    borderWidth,
+  } = style;
+
+  return LayoutPosition({
+    top: borderTopWidth || borderWidth || 0,
+    left: borderLeftWidth || borderWidth || 0,
+    right: borderRightWidth || borderWidth || 0,
+    bottom: borderBottomWidth || borderWidth || 0,
+  });
+};
+
+const convertPaddingToPosition = (style: RNStyleT): LayoutPositionT => {
+  const {
+    padding,
+    paddingBottom,
+    paddingHorizontal,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingVertical,
+  } = style;
+
+  return LayoutPosition({
+    top: paddingTop || paddingVertical || padding || 0,
+    left: paddingLeft || paddingHorizontal || padding || 0,
+    right: paddingRight || paddingHorizontal || padding || 0,
+    bottom: paddingBottom || paddingVertical || padding || 0,
+  });
+};
+
+const convertMarginToPosition = (style: RNStyleT): LayoutPositionT => {
+  const {
+    margin,
+    marginBottom,
+    marginHorizontal,
+    marginLeft,
+    marginRight,
+    marginTop,
+    marginVertical,
+  } = style;
+
+  return LayoutPosition({
+    top: marginTop || marginVertical || margin || 0,
+    left: marginLeft || marginHorizontal || margin || 0,
+    right: marginRight || marginHorizontal || margin || 0,
+    bottom: marginBottom || marginVertical || margin || 0,
+  });
+};
+
+const convertPosition = (style: RNStyleT): LayoutPositionT => {
+  const { top, left, right, bottom } = style;
+  return {
+    top: top || NaN,
+    left: left || NaN,
+    right: right || NaN,
+    bottom: bottom || NaN,
+  };
+};
+
 export const createLayout = (style: RNStyleT): LayoutT => {
   const flowThrough = selectConsistentStyles(style);
   return {
@@ -261,22 +330,17 @@ export const createLayout = (style: RNStyleT): LayoutT => {
     alignItems: convertAlignItems(style),
     alignSelf: convertAlignSelf(style),
     flexDirection: convertFlexDirection(style),
-    positionType: convertPosition(style),
+    positionType: convertPositionType(style),
     width: convertDimension(style.width),
     height: convertDimension(style.height),
-    padding: Position(),
-    margin: Position(),
-    border: Position(),
-    position: Position({
-      left: NaN,
-      top: NaN,
-      right: NaN,
-      bottom: NaN,
-    }),
+    padding: convertPaddingToPosition(style),
+    margin: convertMarginToPosition(style),
+    border: convertBordersToPosition(style),
+    position: convertPosition(style),
   };
 };
 
-export const Position = (positions = {}) => ({
+export const LayoutPosition = (positions = {}) => ({
   top: 0,
   left: 0,
   right: 0,
@@ -292,10 +356,10 @@ export interface LayoutT {
   alignSelf?: yoga.YogaAlign;
   alignContent?: yoga.YogaAlign;
   flexDirection?: number;
-  padding?: ReturnType<typeof Position>;
-  margin?: ReturnType<typeof Position>;
-  border?: ReturnType<typeof Position>;
-  position?: ReturnType<typeof Position>;
+  padding?: LayoutPositionT;
+  margin?: LayoutPositionT;
+  border?: LayoutPositionT;
+  position?: LayoutPositionT;
   positionType?: yoga.YogaPositionType;
   flexWrap?: yoga.YogaFlexWrap;
   flexBasis?: LayoutValue;

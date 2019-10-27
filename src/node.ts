@@ -20,7 +20,7 @@ type SettableProperty =
   | 'flexWrap'
   | 'flexDirection';
 
-const SETTABLE_PROPERTIES: Array<SettableProperty> = [
+const SETTABLE_PROPERTIES: SettableProperty[] = [
   'width',
   'height',
   'minWidth',
@@ -39,16 +39,16 @@ const SETTABLE_PROPERTIES: Array<SettableProperty> = [
   'flexDirection',
 ];
 
-// @ts-ignore
-const createSetNodeProperty = (layoutDefinition, defaultLayout, root) => key => {
-  try {
-    // @ts-ignore
-    const value = layoutDefinition[key] === '' ? defaultLayout[key] : layoutDefinition[key];
-    // @ts-ignore
-    root[`set${key[0].toUpperCase()}${key.substr(1)}`](value);
-  } catch (e) {
-    console.warn(e);
-  }
+type LayoutType = 'padding' | 'margin' | 'position' | 'border';
+const LAYOUT_TYPE: LayoutType[] = ['padding', 'margin', 'position', 'border'];
+
+type LayoutEdge = 'top' | 'left' | 'bottom' | 'right';
+const LAYOUT_EDGE: LayoutEdge[] = ['left', 'top', 'right', 'bottom'];
+const EDGE_MAP: { [key in LayoutEdge]: yoga.YogaEdge } = {
+  top: yoga.EDGE_TOP,
+  left: yoga.EDGE_LEFT,
+  bottom: yoga.EDGE_BOTTOM,
+  right: yoga.EDGE_RIGHT,
 };
 
 export const createYogaNodes = (layout: LayoutT): YogaNode => {
@@ -108,17 +108,27 @@ export const createYogaNodes = (layout: LayoutT): YogaNode => {
     }
   });
 
-  ['padding', 'margin', 'position', 'border'].forEach(key => {
-    ['top', 'right', 'bottom', 'left'].forEach(direction => {
-      try {
-        // @ts-ignore
-        root[`set${key[0].toUpperCase()}${key.substr(1)}`](
-          // @ts-ignore
-          yoga[`EDGE_${direction.toUpperCase()}`],
-          // @ts-ignore
-          layout[key][direction],
-        );
-      } catch (e) {}
+  LAYOUT_TYPE.forEach(type => {
+    LAYOUT_EDGE.forEach(edge => {
+      const edgeVal = EDGE_MAP[edge];
+      const edgeKey = LAYOUT_EDGE[edgeVal];
+
+      switch (type) {
+        case 'border':
+          layout.border && root.setBorder(edgeVal, layout.border[edgeKey]);
+          break;
+        case 'margin':
+          layout.margin && root.setMargin(edgeVal, layout.margin[edgeKey]);
+          break;
+        case 'padding':
+          layout.padding && root.setPadding(edgeVal, layout.padding[edgeKey]);
+          break;
+        case 'position':
+          layout.position && root.setPosition(edgeVal, layout.position[edgeKey]);
+          break;
+        default:
+          throw new UnreachableCaseError(type);
+      }
     });
   });
 
