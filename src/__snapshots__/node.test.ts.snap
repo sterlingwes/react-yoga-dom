@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createYogaNodes should offset children with absolute top 1`] = `
+Array [
+  Layout {
+    "bottom": 0,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 0,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 20,
+    "width": 500,
+  },
+  Layout {
+    "bottom": 0,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 40,
+    "width": 500,
+  },
+]
+`;
