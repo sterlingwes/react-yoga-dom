@@ -48,4 +48,12 @@ describe('createYogaNodes', () => {
     const { children } = calculateLayout();
     expect(children).toMatchSnapshot();
   });
+
+  it('should allow for percentage positioning', () => {
+    layout.children = [...Array(3)].map(() =>
+      createLayout({ height: 20, top: '30%', position: PositionValue.absolute }),
+    );
+    const { children } = calculateLayout();
+    expect(children).toMatchSnapshot();
+  });
 });

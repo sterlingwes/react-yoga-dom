@@ -1,5 +1,5 @@
 import yoga, { Node, YogaNode } from 'yoga-layout';
-import { LayoutT } from './primitives';
+import { LayoutT, LayoutPosition, LayoutValue } from './primitives';
 import { UnreachableCaseError } from './utils';
 
 type SettableProperty =
@@ -51,16 +51,31 @@ const EDGE_MAP: { [key in LayoutEdge]: yoga.YogaEdge } = {
   right: yoga.EDGE_RIGHT,
 };
 
+const isPercent = (value: LayoutValue) => typeof value === 'string' && value !== 'auto';
+const asPercent = (value: LayoutValue) => (typeof value === 'string' ? parseFloat(value) : value);
+
 export const createYogaNodes = (layout: LayoutT): YogaNode => {
   const root = Node.create();
 
   SETTABLE_PROPERTIES.forEach(key => {
     switch (key) {
       case 'width':
-        layout.width && root.setWidth(layout.width);
+        if (layout.width) {
+          if (isPercent(layout.width)) {
+            root.setWidthPercent(asPercent(layout.width));
+            break;
+          }
+          root.setWidth(layout.width);
+        }
         break;
       case 'height':
-        layout.height && root.setHeight(layout.height);
+        if (layout.height) {
+          if (isPercent(layout.height)) {
+            root.setHeightPercent(asPercent(layout.height));
+            break;
+          }
+          root.setHeight(layout.height);
+        }
         break;
       case 'minWidth':
         layout.minWidth && root.setMinWidth(layout.minWidth);
@@ -118,13 +133,34 @@ export const createYogaNodes = (layout: LayoutT): YogaNode => {
           layout.border && root.setBorder(edgeVal, layout.border[edgeKey]);
           break;
         case 'margin':
-          layout.margin && root.setMargin(edgeVal, layout.margin[edgeKey]);
+          if (layout.margin) {
+            const marginVal = layout.margin[edgeKey];
+            if (isPercent(marginVal)) {
+              root.setMarginPercent(edgeVal, asPercent(marginVal));
+              break;
+            }
+            root.setMargin(edgeVal, layout.margin[edgeKey]);
+          }
           break;
         case 'padding':
-          layout.padding && root.setPadding(edgeVal, layout.padding[edgeKey]);
+          if (layout.padding) {
+            const paddingval = layout.padding[edgeKey];
+            if (isPercent(paddingval)) {
+              root.setPaddingPercent(edgeVal, asPercent(paddingval));
+              break;
+            }
+            root.setPadding(edgeVal, layout.padding[edgeKey]);
+          }
           break;
         case 'position':
-          layout.position && root.setPosition(edgeVal, layout.position[edgeKey]);
+          if (layout.position) {
+            const positionVal = layout.position[edgeKey];
+            if (isPercent(positionVal)) {
+              root.setPositionPercent(edgeVal, asPercent(positionVal));
+              break;
+            }
+            root.setPosition(edgeVal, positionVal);
+          }
           break;
         default:
           throw new UnreachableCaseError(type);

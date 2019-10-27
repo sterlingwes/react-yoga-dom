@@ -53,11 +53,13 @@ export enum PositionValue {
 }
 
 type LayoutPositionT = ReturnType<typeof LayoutPosition>;
+type PositionValues = { [key in 'top' | 'left' | 'right' | 'bottom']: LayoutValue };
 
 export type LayoutValue = number | string;
 
 // ltr / rtl props not implemented; here for reference
-// also not supporting percentage (string) dimension values yet
+// also not supporting some percentage (string) dimension values yet
+// (minWidthPercent etc)
 export interface RNStyleT {
   alignContent?: FlexJustifyValue;
   alignItems?: FlexAlignValue;
@@ -70,7 +72,7 @@ export interface RNStyleT {
   borderStartWidth?: number;
   borderTopWidth?: number;
   borderWidth?: number;
-  bottom?: number;
+  bottom?: LayoutValue;
   direction?: LayoutDirection;
   display?: FlexDisplay;
   end?: LayoutValue;
@@ -82,7 +84,7 @@ export interface RNStyleT {
   flexWrap?: FlexWrap;
   height?: string | number;
   justifyContent?: FlexJustifyValue;
-  left?: number;
+  left?: LayoutValue;
   margin?: LayoutValue;
   marginBottom?: LayoutValue;
   marginEnd?: LayoutValue;
@@ -107,9 +109,9 @@ export interface RNStyleT {
   paddingTop?: LayoutValue;
   paddingVertical?: LayoutValue;
   position?: PositionValue;
-  right?: number;
+  right?: LayoutValue;
   start?: LayoutValue;
-  top?: number;
+  top?: LayoutValue;
   width?: LayoutValue;
   zIndex?: number;
 }
@@ -307,7 +309,7 @@ const convertMarginToPosition = (style: RNStyleT): LayoutPositionT => {
   });
 };
 
-const convertPosition = (style: RNStyleT): LayoutPositionT => {
+const convertPosition = (style: RNStyleT): PositionValues => {
   const { top, left, right, bottom } = style;
   return {
     top: top || NaN,
@@ -359,7 +361,7 @@ export interface LayoutT {
   padding?: LayoutPositionT;
   margin?: LayoutPositionT;
   border?: LayoutPositionT;
-  position?: LayoutPositionT;
+  position?: PositionValues;
   positionType?: yoga.YogaPositionType;
   flexWrap?: yoga.YogaFlexWrap;
   flexBasis?: LayoutValue;
@@ -372,38 +374,3 @@ export interface LayoutT {
   minHeight?: number;
   maxHeight?: number;
 }
-
-// export const Layout = (layout = {}): LayoutT => ({
-//   width: 'auto',
-//   height: 'auto',
-//   // minWidth: 0,
-//   // minHeight: 0,
-//   // maxWidth: 'none',
-//   // maxHeight: 'none',
-//   justifyContent: yoga.JUSTIFY_FLEX_START,
-//   alignItems: yoga.ALIGN_STRETCH,
-//   alignSelf: yoga.ALIGN_AUTO,
-//   alignContent: yoga.ALIGN_STRETCH,
-//   flexDirection: yoga.FLEX_DIRECTION_ROW,
-//   padding: Position(),
-//   margin: Position(),
-//   border: Position(),
-//   position: Position({
-//     left: NaN,
-//     top: NaN,
-//     right: NaN,
-//     bottom: NaN,
-//   }),
-//   positionType: yoga.POSITION_TYPE_RELATIVE,
-//   flexWrap: yoga.WRAP_NO_WRAP,
-//   flexBasis: 'auto',
-//   flexGrow: 1,
-//   flexShrink: 0,
-//   children: [],
-//   aspectRatio: 'auto',
-//   minWidth: NaN,
-//   maxWidth: NaN,
-//   minHeight: NaN,
-//   maxHeight: NaN,
-//   ...layout,
-// });

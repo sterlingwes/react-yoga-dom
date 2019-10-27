@@ -58,6 +58,35 @@ Array [
 ]
 `;
 
+exports[`createYogaNodes should allow for percentage positioning 1`] = `
+Array [
+  Layout {
+    "bottom": 150,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 150,
+    "width": 0,
+  },
+  Layout {
+    "bottom": 150,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 150,
+    "width": 0,
+  },
+  Layout {
+    "bottom": 150,
+    "height": 20,
+    "left": 0,
+    "right": 0,
+    "top": 150,
+    "width": 0,
+  },
+]
+`;
+
 exports[`createYogaNodes should offset children with absolute top 1`] = `
 Array [
   Layout {
