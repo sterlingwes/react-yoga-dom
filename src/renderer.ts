@@ -69,8 +69,9 @@ const hostConfig = {
   appendChildToContainer: (parent: ProxyDomNode, child: ProxyDomNode) => {
     const childrenLayout = layoutNode(child.element);
     const layout = layoutNode(parent.element);
-    layout.width = 500;
-    layout.height = 400;
+    const { width, height } = parent.element.getBoundingClientRect();
+    layout.width = width;
+    layout.height = height;
     layout.children = [childrenLayout];
     const node = createYogaNodes(layout);
     node.calculateLayout(layout.width as number, layout.height as number);

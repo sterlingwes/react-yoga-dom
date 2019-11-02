@@ -357,7 +357,7 @@ export interface LayoutT {
   alignItems?: yoga.YogaAlign;
   alignSelf?: yoga.YogaAlign;
   alignContent?: yoga.YogaAlign;
-  flexDirection?: number;
+  flexDirection?: yoga.YogaFlexDirection;
   padding?: LayoutPositionT;
   margin?: LayoutPositionT;
   border?: LayoutPositionT;

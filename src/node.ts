@@ -117,6 +117,7 @@ export const createYogaNodes = (layout: LayoutT): YogaNode => {
         layout.flexWrap && root.setFlexWrap(layout.flexWrap);
         break;
       case 'flexDirection':
+        layout.flexDirection && root.setFlexDirection(layout.flexDirection);
         break;
       default:
         throw new UnreachableCaseError(key);
