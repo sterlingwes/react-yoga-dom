@@ -5,6 +5,8 @@
   "author": "Wes Johnson <swj@wesquire.ca>",
   "license": "MIT",
   "scripts": {
+    "start": "webpack -w",
+    "serve": "python -m SimpleHTTPServer 8081",
     "watch": "tsc --watch",
     "test:watch": "jest --watch"
   },

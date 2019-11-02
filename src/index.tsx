@@ -17,8 +17,8 @@ const View = ({ style, children, ...rest }: ViewProps) => (
 // position: absolute; left: 0px; right: 0px; top: 5px; bottom: 5px; width: 0px;
 const App = () => (
   <View style={{ flex: 1 }}>
-    <View>Hello</View>
-    <View style={{ position: 'absolute', top: 5 }}>World</View>
+    <View style={{ flex: 1 }}>Hello</View>
+    <View style={{ position: 'absolute', top: 40 }}>World</View>
   </View>
 );
 
