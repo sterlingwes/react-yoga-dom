@@ -15,6 +15,40 @@ function traceWrap(hostConfig) {
   return traceWrappedHostConfig;
 }
 
+const setProps = (instance, props) => {
+  const domElement = instance.element;
+  Object.keys(props).forEach(propName => {
+    const propValue = props[propName];
+    if (propName === 'children') {
+      if (typeof propValue === 'string' || typeof propValue === 'number') {
+        // @ts-ignore
+        domElement.textContent = propValue;
+      }
+    } else if (propName === 'onClick') {
+      domElement.addEventListener('click', propValue);
+    } else if (propName === 'className') {
+      domElement.setAttribute('class', propValue);
+    } else if (propName === 'data-style') {
+      propValue && instance.saveStyle(props[propName]);
+    } else {
+      const propValue = props[propName];
+      domElement.setAttribute(propName, propValue);
+    }
+  });
+};
+
+const layoutNodes = (root: ProxyDomNode) => {
+  const children = layoutChildren(root.element);
+  const layout = layoutNode(root.element);
+  const { width, height } = root.element.getBoundingClientRect();
+  layout.width = width;
+  layout.height = height;
+  layout.children = children;
+  const node = createYogaNodes(layout);
+  node.calculateLayout(layout.width as number, layout.height as number);
+  applyNodeStyle(root.element, node);
+};
+
 const rootHostContext = {};
 const childHostContext = {};
 
@@ -35,24 +69,7 @@ const hostConfig = {
   createInstance: (type, newProps, rootContainerInstance, _currentHostContext, workInProgress) => {
     const instance = new ProxyDomNode('div');
     const domElement = instance.element;
-    Object.keys(newProps).forEach(propName => {
-      const propValue = newProps[propName];
-      if (propName === 'children') {
-        if (typeof propValue === 'string' || typeof propValue === 'number') {
-          // @ts-ignore
-          domElement.textContent = propValue;
-        }
-      } else if (propName === 'onClick') {
-        domElement.addEventListener('click', propValue);
-      } else if (propName === 'className') {
-        domElement.setAttribute('class', propValue);
-      } else if (propName === 'data-style') {
-        propValue && instance.saveStyle(newProps[propName]);
-      } else {
-        const propValue = newProps[propName];
-        domElement.setAttribute(propName, propValue);
-      }
-    });
+    setProps(instance, newProps);
     return instance;
   },
   appendInitialChild: (parent, child) => {
@@ -62,38 +79,22 @@ const hostConfig = {
     return !!props.autofocus;
   },
   prepareForCommit: () => {},
-  resetAfterCommit: () => {},
+  resetAfterCommit: (parent: ProxyDomNode) => {
+    layoutNodes(parent);
+  },
   commitMount: (domElement, type, newProps, fiberNode) => {
     domElement.focus();
   },
   appendChildToContainer: (parent: ProxyDomNode, child: ProxyDomNode) => {
-    const childrenLayout = layoutNode(child.element);
-    const layout = layoutNode(parent.element);
-    const { width, height } = parent.element.getBoundingClientRect();
-    layout.width = width;
-    layout.height = height;
-    layout.children = [childrenLayout];
-    const node = createYogaNodes(layout);
-    node.calculateLayout(layout.width as number, layout.height as number);
     parent.appendChild(child);
-    applyNodeStyle(parent.element, node);
+    layoutNodes(parent);
   },
   supportsMutation: true,
-  prepareUpdate(domElement, oldProps, newProps) {
-    // return true;
-  },
-  commitUpdate(domElement, updatePayload, type, oldProps, newProps) {
-    // Object.keys(newProps).forEach(propName => {
-    //   const propValue = newProps[propName];
-    //   if (propName === 'children') {
-    //     if (typeof propValue === 'string' || typeof propValue === 'number') {
-    //       domElement.textContent = propValue;
-    //     }
-    //   } else {
-    //     const propValue = newProps[propName];
-    //     domElement.setAttribute(propName, propValue);
-    //   }
-    // });
+  prepareUpdate: (instance, type, oldProps, newProps, rootContainerInstance, hostContext) => true,
+  commitUpdate(instance, updatePayload, type, oldProps, newProps) {
+    // prepareUpdate -> true retriggers this
+    const domElement = instance.element;
+    setProps(instance, newProps);
   },
   commitTextUpdate(textInstance, oldText, newText) {
     textInstance.textContent = newText;
