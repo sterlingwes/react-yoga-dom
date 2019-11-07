@@ -19,16 +19,21 @@ controlMountPoint.style.setProperty('position', 'absolute');
 controlMountPoint.style.setProperty('right', '0px');
 document.querySelector('body').appendChild(controlMountPoint);
 
+let parentFlex: 'column' | 'row' = 'column';
+let selectedNode: number = 0;
 const children = [{ id: 1, style: { flex: 1 } }, { id: 2, style: { flex: 1 } }];
 const makeNode = style => ({ id: 0, style: { ...style, flex: 1 }, children });
+const getParentNode = () => makeNode({ flexDirection: parentFlex });
 
-let parentFlex: 'column' | 'row' = 'column';
+const onSelectNode = nodeId => {
+  selectedNode = nodeId;
+  renderControls();
+};
+const addChild = (node, index) => {};
 
 const renderCanvas = () =>
-  YogaRenderer.render(
-    <RenderArea node={makeNode({ flexDirection: parentFlex })} />,
-    canvasMountPoint,
-    () => console.log('rendered', parentFlex),
+  YogaRenderer.render(<RenderArea node={getParentNode()} />, canvasMountPoint, () =>
+    console.log('rendered', parentFlex),
   );
 renderCanvas();
 
@@ -37,12 +42,18 @@ const update = updater => (...args) => {
   renderCanvas();
 };
 
-ReactDOM.render(
-  <Controls
-    parentFlex={parentFlex}
-    onParentFlexDirectionChange={update(direction => {
-      parentFlex = direction;
-    })}
-  />,
-  controlMountPoint,
-);
+function renderControls() {
+  ReactDOM.render(
+    <Controls
+      tree={getParentNode()}
+      parentFlex={parentFlex}
+      onParentFlexDirectionChange={update(direction => {
+        parentFlex = direction;
+      })}
+      onSelectNode={onSelectNode}
+      selectedNode={selectedNode}
+    />,
+    controlMountPoint,
+  );
+}
+renderControls();
