@@ -45,6 +45,7 @@ const addChild = node => {
   nodeCount += 1;
   node.children.push({ id: nodeCount, style: { flex: 1 } });
   renderCanvas();
+  renderControls();
 };
 const onAddChild = () => {
   if (!selectedNode) {
