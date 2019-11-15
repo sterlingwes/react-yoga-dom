@@ -31,15 +31,20 @@ const onSelectNode = nodeId => {
   renderControls();
 };
 
-const findNodeByIndex = (nodes, index) =>
-  nodes.find(node => {
+const findNodeByIndex = (nodes, index) => {
+  let foundChildNode;
+  const foundParentNode = nodes.find(node => {
     const found = node.id === index;
     if (found) return true;
     if (node.children) {
-      return findNodeByIndex(node.children, index);
+      foundChildNode = findNodeByIndex(node.children, index);
+      return !!foundChildNode;
     }
     return false;
   });
+
+  return foundChildNode || foundParentNode;
+};
 const addChild = node => {
   if (!node.children) node.children = [];
   nodeCount += 1;
