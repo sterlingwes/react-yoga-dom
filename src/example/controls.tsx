@@ -15,8 +15,10 @@ type Props = {
   parentFlex: Direction;
   onParentFlexDirectionChange: (arg0: Direction) => any;
   onAddChild: () => void;
+  onChangeStyle: (string) => void;
   onSelectNode: (nodeId: number) => void;
   selectedNode: number;
+  selectedStyleValue: string;
 };
 
 type IteratorT = (value: any, index: number, items: any[]) => unknown;
@@ -61,8 +63,10 @@ export const Controls = ({
   parentFlex,
   onParentFlexDirectionChange,
   onAddChild,
+  onChangeStyle,
   onSelectNode,
   selectedNode,
+  selectedStyleValue,
 }: Props) => (
   <View style={{ flex: 1 }}>
     <NodeTree tree={tree} depth={0} onClick={onSelectNode} selectedNode={selectedNode} />
@@ -76,7 +80,7 @@ export const Controls = ({
     </View>
     <View style={{ flex: 1 }}>
       <label>Node Styles</label>
-      <textarea>Something</textarea>
+      <textarea onChange={onChangeStyle}>{selectedStyleValue}</textarea>
     </View>
   </View>
 );

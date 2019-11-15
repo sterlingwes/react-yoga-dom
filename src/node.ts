@@ -1,43 +1,7 @@
 import yoga, { Node, YogaNode } from 'yoga-layout';
 import { LayoutT, LayoutPosition, LayoutValue } from './primitives';
 import { UnreachableCaseError } from './utils';
-
-type SettableProperty =
-  | 'width'
-  | 'height'
-  | 'minWidth'
-  | 'maxWidth'
-  | 'minHeight'
-  | 'maxHeight'
-  | 'justifyContent'
-  | 'alignItems'
-  | 'alignSelf'
-  | 'alignContent'
-  | 'flexGrow'
-  | 'flexShrink'
-  | 'positionType'
-  | 'aspectRatio'
-  | 'flexWrap'
-  | 'flexDirection';
-
-const SETTABLE_PROPERTIES: SettableProperty[] = [
-  'width',
-  'height',
-  'minWidth',
-  'maxWidth',
-  'minHeight',
-  'maxHeight',
-  'justifyContent',
-  'alignItems',
-  'alignSelf',
-  'alignContent',
-  'flexGrow',
-  'flexShrink',
-  'positionType',
-  'aspectRatio',
-  'flexWrap',
-  'flexDirection',
-];
+import { YOGA_SETTABLE_PROPERTIES } from './constants/styles';
 
 type LayoutType = 'padding' | 'margin' | 'position' | 'border';
 const LAYOUT_TYPE: LayoutType[] = ['padding', 'margin', 'position', 'border'];
@@ -57,7 +21,7 @@ const asPercent = (value: LayoutValue) => (typeof value === 'string' ? parseFloa
 export const createYogaNodes = (layout: LayoutT): YogaNode => {
   const root = Node.create();
 
-  SETTABLE_PROPERTIES.forEach(key => {
+  YOGA_SETTABLE_PROPERTIES.forEach(key => {
     switch (key) {
       case 'width':
         if (layout.width) {
