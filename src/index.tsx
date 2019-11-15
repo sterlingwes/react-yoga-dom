@@ -2,20 +2,23 @@ import React from 'react';
 import yoga from 'yoga-layout';
 // @ts-ignore
 import ReactDOM from 'react-dom';
-import YogaRenderer from './renderer';
+import YogaRenderer, { layoutNodes } from './renderer';
 import { ProxyDomNode } from './dom-node';
 import { RenderArea } from './example/render-area';
 import { Controls } from './example/controls';
 import { REACT_SETTABLE_PROPERTIES } from './constants/styles';
 
+const applyViewportStyle = (element: HTMLElement, width: string) => {
+  element.style.setProperty('width', width);
+  element.style.setProperty('height', '100vh');
+};
+
 const canvasMountPoint = new ProxyDomNode('div');
-canvasMountPoint.element.style.setProperty('width', '60vw');
-canvasMountPoint.element.style.setProperty('height', '100vh');
+applyViewportStyle(canvasMountPoint.element, '60vw');
 document.querySelector('body').appendChild(canvasMountPoint.element);
 
 const controlMountPoint = document.createElement('div');
-controlMountPoint.style.setProperty('width', '40vw');
-controlMountPoint.style.setProperty('height', '100vh');
+applyViewportStyle(controlMountPoint, '40vw');
 controlMountPoint.style.setProperty('position', 'absolute');
 controlMountPoint.style.setProperty('right', '0px');
 document.querySelector('body').appendChild(controlMountPoint);
@@ -137,3 +140,16 @@ function renderControls() {
   );
 }
 renderControls();
+
+const RESIZE_DEBOUNCE = 500;
+let resizeTimeout;
+
+window.onresize = () => {
+  if (resizeTimeout) {
+    clearTimeout(resizeTimeout);
+  }
+  resizeTimeout = setTimeout(() => {
+    applyViewportStyle(canvasMountPoint.element, '60vw');
+    layoutNodes(canvasMountPoint);
+  }, RESIZE_DEBOUNCE);
+};

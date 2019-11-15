@@ -37,7 +37,7 @@ const setProps = (instance, props) => {
   });
 };
 
-const layoutNodes = (root: ProxyDomNode) => {
+export const layoutNodes = (root: ProxyDomNode) => {
   const children = layoutChildren(root.element);
   const layout = layoutNode(root.element);
   const { width, height } = root.element.getBoundingClientRect();
