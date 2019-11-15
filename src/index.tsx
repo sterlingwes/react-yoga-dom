@@ -23,11 +23,12 @@ controlMountPoint.style.setProperty('position', 'absolute');
 controlMountPoint.style.setProperty('right', '0px');
 document.querySelector('body').appendChild(controlMountPoint);
 
-const DEFAULT_NODE_STYLE = '{flex: 1}';
+const DEFAULT_NODE_STYLE = { flex: 1 };
+const DEFAULT_NODE_STYLE_TEXT = JSON.stringify(DEFAULT_NODE_STYLE, null, 2);
 let parentFlex: 'column' | 'row' = 'column';
 let selectedNode: number = 0;
-let selectedNodeStyle: string = DEFAULT_NODE_STYLE;
-const children = [{ id: 1, style: { flex: 1 } }, { id: 2, style: { flex: 1 } }];
+let selectedNodeStyle: string = DEFAULT_NODE_STYLE_TEXT;
+const children = [{ id: 1, style: DEFAULT_NODE_STYLE }, { id: 2, style: DEFAULT_NODE_STYLE }];
 let nodeCount = children.length;
 const makeNode = style => ({ id: 0, style: { ...style, flex: 1 }, children });
 const getParentNode = () => makeNode({ flexDirection: parentFlex });
@@ -37,7 +38,7 @@ const findNodeStyle = (nodeId: number): string => {
   if (node) {
     return JSON.stringify(node.style, null, 2);
   }
-  return DEFAULT_NODE_STYLE;
+  return DEFAULT_NODE_STYLE_TEXT;
 };
 const onSelectNode = (nodeId: number) => {
   selectedNode = nodeId;
@@ -62,7 +63,7 @@ const findNodeByIndex = (nodes, index) => {
 const addChild = node => {
   if (!node.children) node.children = [];
   nodeCount += 1;
-  node.children.push({ id: nodeCount, style: { flex: 1 } });
+  node.children.push({ id: nodeCount, style: DEFAULT_NODE_STYLE });
   renderCanvas();
   renderControls();
 };
