@@ -52,7 +52,13 @@ const NodeTree = ({
       <br />
       {tree.children &&
         tree.children.map(child => (
-          <NodeTree tree={child} depth={depth + 1} onClick={onClick} selectedNode={selectedNode} />
+          <NodeTree
+            key={`node-tree-${child.id}`}
+            tree={child}
+            depth={depth + 1}
+            onClick={onClick}
+            selectedNode={selectedNode}
+          />
         ))}
     </View>
   );
@@ -73,14 +79,17 @@ export const Controls = ({
     <button onClick={onAddChild}>Add child</button>
     <View style={{ flex: 1 }}>
       <label>Parent Flex Direction</label>
-      <select onChange={ev => onParentFlexDirectionChange(ev.target.value as Direction)}>
-        <option selected={parentFlex === 'row'}>row</option>
-        <option selected={parentFlex === 'column'}>column</option>
+      <select
+        onChange={ev => onParentFlexDirectionChange(ev.target.value as Direction)}
+        value={parentFlex}
+      >
+        <option>row</option>
+        <option>column</option>
       </select>
     </View>
     <View style={{ flex: 1 }}>
       <label>Node Styles</label>
-      <textarea onChange={onChangeStyle}>{selectedStyleValue}</textarea>
+      <textarea onChange={onChangeStyle} value={selectedStyleValue} />
     </View>
   </View>
 );

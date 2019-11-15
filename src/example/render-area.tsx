@@ -16,7 +16,10 @@ type Props = {
 const verticallyCenterText = (children?: Node[]) => (children ? {} : { flexDirection: 'row' });
 
 const renderChild = (node: Node) => (
-  <NodeBox style={{ ...node.style, ...verticallyCenterText(node.children) }}>
+  <NodeBox
+    key={`node-${node.id}`}
+    style={{ ...node.style, ...verticallyCenterText(node.children) }}
+  >
     {node.children ? (
       node.children.map(renderChild)
     ) : (
