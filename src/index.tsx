@@ -6,7 +6,7 @@ import YogaRenderer, { layoutNodes } from './renderer';
 import { ProxyDomNode } from './dom-node';
 import { RenderArea } from './example/render-area';
 import { Controls } from './example/controls';
-import { REACT_SETTABLE_PROPERTIES } from './constants/styles';
+import { REACT_SETTABLE_PROPERTIES, REACT_VALID_STRING_VALUES } from './constants/styles';
 
 const applyViewportStyle = (element: HTMLElement, width: string) => {
   element.style.setProperty('width', width);
@@ -23,17 +23,22 @@ controlMountPoint.style.setProperty('position', 'absolute');
 controlMountPoint.style.setProperty('right', '0px');
 document.querySelector('body').appendChild(controlMountPoint);
 
+const DEFAULT_ROOT_STYLE = { flex: 1, flexDirection: 'column' };
+const DEFAULT_ROOT_STYLE_TEXT = JSON.stringify(DEFAULT_ROOT_STYLE, null, 2);
 const DEFAULT_NODE_STYLE = { flex: 1 };
 const DEFAULT_NODE_STYLE_TEXT = JSON.stringify(DEFAULT_NODE_STYLE, null, 2);
-let parentFlex: 'column' | 'row' = 'column';
 let selectedNode: number = 0;
-let selectedNodeStyle: string = DEFAULT_NODE_STYLE_TEXT;
+let selectedNodeStyle: string = DEFAULT_ROOT_STYLE_TEXT;
 const children = [{ id: 1, style: DEFAULT_NODE_STYLE }, { id: 2, style: DEFAULT_NODE_STYLE }];
 let nodeCount = children.length;
-const makeNode = style => ({ id: 0, style: { ...style, flex: 1 }, children });
-const getParentNode = () => makeNode({ flexDirection: parentFlex });
+const makeRootNode = style => ({ id: 0, style, children });
+let parentNode = makeRootNode(DEFAULT_ROOT_STYLE);
 
 const findNodeStyle = (nodeId: number): string => {
+  if (!nodeId) {
+    return JSON.stringify(parentNode.style, null, 2);
+  }
+
   const node = findNodeByIndex(children, nodeId);
   if (node) {
     return JSON.stringify(node.style, null, 2);
@@ -81,12 +86,16 @@ const onAddChild = () => {
 
 const enforceStringKeys = (obj: string) => obj.replace(/([a-zA-Z0-9]+):/g, '"$1":');
 const enforceDoubleQuotes = (obj: string) => obj.replace(/'/g, '"');
+const validStringValue = (key: string, value: string) =>
+  REACT_VALID_STRING_VALUES[key] ? REACT_VALID_STRING_VALUES[key].indexOf(value) >= 0 : true;
 const filterValidAttributes = (styles: Object) =>
   Object.keys(styles).reduce((acc, key) => {
     if (REACT_SETTABLE_PROPERTIES.indexOf(key) < 0) return acc;
+    const value = styles[key];
+    if (typeof value === 'string' && !validStringValue(key, value)) return acc;
     return {
       ...acc,
-      [key]: styles[key],
+      [key]: value,
     };
   }, {});
 const parseStyle = (styles: string) => {
@@ -101,7 +110,16 @@ const parseStyle = (styles: string) => {
 const onChangeStyle = changeEvent => {
   const styles = changeEvent.target.value;
   selectedNodeStyle = styles;
-  if (!selectedNode) return;
+  renderControls();
+
+  if (!selectedNode) {
+    const style = parseStyle(styles);
+    if (!Object.keys(style).length) return;
+    parentNode = makeRootNode(style);
+    renderCanvas();
+    return;
+  }
+
   const node = findNodeByIndex(children, selectedNode);
   if (node) {
     const style = parseStyle(styles);
@@ -112,25 +130,16 @@ const onChangeStyle = changeEvent => {
 };
 
 function renderCanvas() {
-  YogaRenderer.render(<RenderArea node={getParentNode()} />, canvasMountPoint, () =>
-    console.log('rendered', parentFlex),
+  YogaRenderer.render(<RenderArea node={parentNode} />, canvasMountPoint, () =>
+    console.log('rendered'),
   );
 }
 renderCanvas();
 
-const update = updater => (...args) => {
-  updater(...args);
-  renderCanvas();
-};
-
 function renderControls() {
   ReactDOM.render(
     <Controls
-      tree={getParentNode()}
-      parentFlex={parentFlex}
-      onParentFlexDirectionChange={update(direction => {
-        parentFlex = direction;
-      })}
+      tree={parentNode}
       onAddChild={onAddChild}
       onChangeStyle={onChangeStyle}
       onSelectNode={onSelectNode}

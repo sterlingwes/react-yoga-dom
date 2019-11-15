@@ -35,6 +35,10 @@ export const YOGA_SETTABLE_PROPERTIES: YogaSettableProperty[] = [
   'flexDirection',
 ];
 
+export const REACT_VALID_STRING_VALUES = {
+  flexDirection: ['column', 'column-reverse', 'row', 'row-reverse'],
+};
+
 export const REACT_SETTABLE_PROPERTIES = [
   'alignContent',
   'alignItems',

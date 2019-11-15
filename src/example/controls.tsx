@@ -12,8 +12,6 @@ type Node = {
 
 type Props = {
   tree: Node;
-  parentFlex: Direction;
-  onParentFlexDirectionChange: (arg0: Direction) => any;
   onAddChild: () => void;
   onChangeStyle: (string) => void;
   onSelectNode: (nodeId: number) => void;
@@ -66,8 +64,6 @@ const NodeTree = ({
 
 export const Controls = ({
   tree,
-  parentFlex,
-  onParentFlexDirectionChange,
   onAddChild,
   onChangeStyle,
   onSelectNode,
@@ -77,16 +73,6 @@ export const Controls = ({
   <View style={{ flex: 1 }}>
     <NodeTree tree={tree} depth={0} onClick={onSelectNode} selectedNode={selectedNode} />
     <button onClick={onAddChild}>Add child</button>
-    <View style={{ flex: 1 }}>
-      <label>Parent Flex Direction</label>
-      <select
-        onChange={ev => onParentFlexDirectionChange(ev.target.value as Direction)}
-        value={parentFlex}
-      >
-        <option>row</option>
-        <option>column</option>
-      </select>
-    </View>
     <View style={{ flex: 1 }}>
       <label>Node Styles</label>
       <textarea onChange={onChangeStyle} value={selectedStyleValue} />
