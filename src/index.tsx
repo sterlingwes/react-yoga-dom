@@ -22,6 +22,7 @@ document.querySelector('body').appendChild(controlMountPoint);
 let parentFlex: 'column' | 'row' = 'column';
 let selectedNode: number = 0;
 const children = [{ id: 1, style: { flex: 1 } }, { id: 2, style: { flex: 1 } }];
+let nodeCount = children.length;
 const makeNode = style => ({ id: 0, style: { ...style, flex: 1 }, children });
 const getParentNode = () => makeNode({ flexDirection: parentFlex });
 
@@ -29,12 +30,36 @@ const onSelectNode = nodeId => {
   selectedNode = nodeId;
   renderControls();
 };
-const addChild = (node, index) => {};
 
-const renderCanvas = () =>
+const findNodeByIndex = (nodes, index) =>
+  nodes.find(node => {
+    const found = node.id === index;
+    if (found) return true;
+    if (node.children) {
+      return findNodeByIndex(node.children, index);
+    }
+    return false;
+  });
+const addChild = node => {
+  if (!node.children) node.children = [];
+  nodeCount += 1;
+  node.children.push({ id: nodeCount, style: { flex: 1 } });
+  renderCanvas();
+};
+const onAddChild = () => {
+  const node = findNodeByIndex(children, selectedNode);
+  if (node) {
+    addChild(node);
+  } else {
+    console.warn('No node found for selectedNode');
+  }
+};
+
+function renderCanvas() {
   YogaRenderer.render(<RenderArea node={getParentNode()} />, canvasMountPoint, () =>
     console.log('rendered', parentFlex),
   );
+}
 renderCanvas();
 
 const update = updater => (...args) => {
@@ -50,6 +75,7 @@ function renderControls() {
       onParentFlexDirectionChange={update(direction => {
         parentFlex = direction;
       })}
+      onAddChild={onAddChild}
       onSelectNode={onSelectNode}
       selectedNode={selectedNode}
     />,
