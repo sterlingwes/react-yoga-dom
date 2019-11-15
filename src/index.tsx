@@ -47,6 +47,9 @@ const addChild = node => {
   renderCanvas();
 };
 const onAddChild = () => {
+  if (!selectedNode) {
+    addChild({ children });
+  }
   const node = findNodeByIndex(children, selectedNode);
   if (node) {
     addChild(node);
