@@ -8,7 +8,7 @@ function traceWrap(hostConfig) {
   Object.keys(hostConfig).map(key => {
     const func = hostConfig[key];
     traceWrappedHostConfig[key] = (...args) => {
-      console.log(key);
+      // console.log(key);
       return func(...args);
     };
   });
