@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: sterlingwes/gh-pages-deploy-action@fdabc58860f0433c5e36ebb07a92e11056fd9713
+      - uses: sterlingwes/gh-pages-deploy-action@ef7231f5cbdbf2c626902ff7ff771f3add58665b
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
-          source-directory: public
-          build-command: yarn build
+          source-directory: playground-site
+          build-command: yarn build-playground

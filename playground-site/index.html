@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body {
+        background-color: #222;
+      }
+
+      .node-box {
+        border: 1px solid #EEE
+      }
+
+      .node-text {
+        color: #eee;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="http://localhost:8081/bundle.js"></script>
+    <script>
+      if (window.location.hostname === 'localhost') {
+        const reloadScript = document.createElement('script')
+        reloadScript.src = 'http://localhost:35729/livereload.js'
+        document.body.appendChild(reloadScript);
+      }
+    </script>
+  </body>
+</html>
