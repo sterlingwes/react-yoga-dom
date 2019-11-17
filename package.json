@@ -6,10 +6,10 @@
   "author": "Wes Johnson <swj@wesquire.ca>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:watch-build-*\"",
-    "serve": "python -m SimpleHTTPServer 8081",
-    "watch-build-src": "rimraf ./dist && tsc --watch --declaration -p ./src",
-    "watch-build-playground": "webpack -w --config ./playground/webpack.config.js",
+    "start": "concurrently \"yarn:lib-tsc\" \"yarn:serve\"",
+    "serve": "`# 💁‍♀️\n` `# 🌎⏳ open http://localhost:8081 to view playground once webpack finishes` `#\n` `# 💁‍♂️\n` && PORT=8081 SRV=playground-site htmlsrv",
+    "lib-tsc": "rimraf ./dist && tsc-watch --noClear --declaration -p ./src --onFirstSuccess \"yarn webpack-watch\"",
+    "webpack-watch": "webpack -w --config ./playground/webpack.config.js",
     "test-watch": "jest --watch"
   },
   "devDependencies": {
@@ -18,11 +18,13 @@
     "@types/react-reconciler": "^0.18.0",
     "@types/yoga-layout": "^1.9.1",
     "concurrently": "^5.0.0",
+    "htmlsrv": "^1.2.1",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
+    "tsc-watch": "^4.0.0",
     "typescript": "^3.6.4",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
