@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.15.0'
-      - uses: sterlingwes/gh-pages-deploy-action@64954d6e48ab5b74163ead3789c5d6647dd4d378
+      - uses: sterlingwes/gh-pages-deploy-action@v1.1
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
           source-directory: playground-site
