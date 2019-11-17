@@ -25,6 +25,7 @@ const controlMountPoint = document.createElement('div');
 applyViewportStyle(controlMountPoint, '40vw');
 controlMountPoint.style.setProperty('position', 'absolute');
 controlMountPoint.style.setProperty('right', '0px');
+controlMountPoint.style.setProperty('background-color', '#282c34');
 document.querySelector('body').appendChild(controlMountPoint);
 
 const DEFAULT_ROOT_STYLE = { flex: 1, flexDirection: 'column' };

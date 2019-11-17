@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, RNStyleT } from 'react-yoga-dom';
+import { RNStyleT } from 'react-yoga-dom';
 
 type Direction = 'row' | 'column';
 
@@ -40,7 +40,7 @@ const NodeTree = ({
 }) => {
   const selected = tree.id === selectedNode ? ' (selected)' : '';
   return (
-    <View style={{ flex: 1 }}>
+    <div style={{ flex: 1 }}>
       <Indent times={depth} />
       <button onClick={() => onClick(tree.id)}>
         Node {tree.id}
@@ -57,8 +57,29 @@ const NodeTree = ({
             selectedNode={selectedNode}
           />
         ))}
-    </View>
+    </div>
   );
+};
+
+const styles = {
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+
+  header: {
+    color: '#61dafb',
+    fontSize: '2em',
+    fontWeight: 700,
+    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottom: '1px solid #ddd',
+  },
+
+  description: {
+    color: '#ddd',
+    fontWeight: 200,
+  },
 };
 
 export const Controls = ({
@@ -69,12 +90,23 @@ export const Controls = ({
   selectedNode,
   selectedStyleValue,
 }: Props) => (
-  <View style={{ flex: 1 }}>
+  <div style={styles.container}>
+    <div style={styles.header}>react-yoga-dom</div>
+    <div style={styles.description}>
+      <p>
+        A React.js renderer for the DOM / web using Yoga for layout. Yoga is the layout engine used
+        by React Native which is similar to CSS flexbox, but not the same.
+      </p>
+      <p>
+        This playground demonstrates rendering to web using styles that might be used for views in
+        React Native.
+      </p>
+    </div>
     <NodeTree tree={tree} depth={0} onClick={onSelectNode} selectedNode={selectedNode} />
     <button onClick={onAddChild}>Add child</button>
-    <View style={{ flex: 1 }}>
+    <div style={{ flex: 1 }}>
       <label>Node Styles</label>
       <textarea onChange={onChangeStyle} value={selectedStyleValue} />
-    </View>
-  </View>
+    </div>
+  </div>
 );
