@@ -1,7 +1,6 @@
 import React from 'react';
 import { NodeBox } from './node-box';
-import { View } from './view';
-import { RNStyleT } from '../primitives';
+import { View, RNStyleT } from 'react-yoga-dom';
 
 type Node = {
   id: number;

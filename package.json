@@ -1,22 +1,26 @@
 {
-  "name": "react-yoga-renderer",
+  "name": "react-yoga-dom",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Wes Johnson <swj@wesquire.ca>",
   "license": "MIT",
   "scripts": {
-    "start": "webpack -w",
+    "start": "concurrently \"npm:watch-build-*\"",
     "serve": "python -m SimpleHTTPServer 8081",
-    "watch": "tsc --watch",
-    "test:watch": "jest --watch"
+    "watch-build-src": "rimraf ./dist && tsc --watch --declaration -p ./src",
+    "watch-build-playground": "webpack -w --config ./playground/webpack.config.js",
+    "test-watch": "jest --watch"
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",
     "@types/react": "^16.9.11",
     "@types/react-reconciler": "^0.18.0",
     "@types/yoga-layout": "^1.9.1",
+    "concurrently": "^5.0.0",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.6.4",

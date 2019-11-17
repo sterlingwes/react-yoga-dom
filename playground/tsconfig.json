@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*"],
+  "exclude": ["./**/*.test.ts"],
+  "compilerOptions": {
+    "outDir": "../playground-site/dist",
+    "baseUrl": ".",
+    "paths": {
+      "react-yoga-dom": ["../"]
+    },
+    "moduleResolution": "Node"
+  },
+}

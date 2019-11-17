@@ -2,11 +2,15 @@ import React from 'react';
 import yoga from 'yoga-layout';
 // @ts-ignore
 import ReactDOM from 'react-dom';
-import YogaRenderer, { layoutNodes } from './renderer';
-import { ProxyDomNode } from './dom-node';
-import { RenderArea } from './example/render-area';
-import { Controls } from './example/controls';
-import { REACT_SETTABLE_PROPERTIES, REACT_VALID_STRING_VALUES } from './constants/styles';
+import {
+  YogaRenderer,
+  layoutNodes,
+  ProxyDomNode,
+  REACT_SETTABLE_PROPERTIES,
+  REACT_VALID_STRING_VALUES,
+} from 'react-yoga-dom';
+import { RenderArea } from './render-area';
+import { Controls } from './controls';
 
 const applyViewportStyle = (element: HTMLElement, width: string) => {
   element.style.setProperty('width', width);

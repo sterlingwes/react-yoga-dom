@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from './view';
-import { RNStyleT } from '../primitives';
+import { View, RNStyleT } from 'react-yoga-dom';
 
 type Direction = 'row' | 'column';
 

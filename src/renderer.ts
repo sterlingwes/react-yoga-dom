@@ -121,7 +121,7 @@ const hostConfig = {
 };
 // @ts-ignore
 const ReactReconcilerInst = ReactReconciler(traceWrap(hostConfig));
-export default {
+export const YogaRenderer = {
   render: (reactElement, domElement, callback) => {
     // Create a root Container if it doesnt exist
     if (!domElement._rootContainer) {

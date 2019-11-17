@@ -3,7 +3,8 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.tsx',
+  entry: './index.tsx',
+  context: path.resolve(__dirname),
   module: {
     rules: [
       {
@@ -15,10 +16,13 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      'react-yoga-dom': '../',
+    },
   },
   plugins: [new LiveReloadPlugin()],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../playground-site'),
   },
 };
