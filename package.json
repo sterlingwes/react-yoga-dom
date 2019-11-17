@@ -11,7 +11,8 @@
     "lib-tsc": "rimraf ./dist && tsc-watch --noClear --declaration -p ./src --onFirstSuccess \"yarn webpack-watch\"",
     "webpack-watch": "webpack -w --config ./playground/webpack.config.js",
     "test-watch": "jest --watch",
-    "build-playground": "tsc -p ./src && webpack --config ./playground/webpack.config.js"
+    "yoga-prebuild": "npm config set yoga-layout:platform standalone",
+    "build-playground": "yarn yoga-prebuild && tsc -p ./src && webpack --config ./playground/webpack.config.js"
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",
