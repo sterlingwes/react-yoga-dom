@@ -2,13 +2,19 @@ import React from 'react';
 import { Node } from './types';
 
 type IteratorT = (value: any, index: number, items: any[]) => unknown;
-const mapTimes = (n: number, iterator: IteratorT) => (
-  <span>{[...Array(n)].map(iterator).join('')}</span>
-);
+const mapTimes = (n: number, iterator: IteratorT) => [...Array(n)].map(iterator).join('');
 
-const Indent = ({ times }) => mapTimes(times, () => '-');
+const Indent = ({ times }) => <span>{times ? '┝' + mapTimes(times - 1, () => '━') : ''}</span>;
 
 type ClickHandler = (treeId: number) => void;
+
+const styles = {
+  nodeRow: {
+    flex: 1,
+    cursor: 'pointer',
+    color: '#ccc',
+  },
+};
 
 export const NodeTree = ({
   tree,
@@ -24,12 +30,11 @@ export const NodeTree = ({
   const selected = tree.id === selectedNode ? ' (selected)' : '';
   return (
     <div style={{ flex: 1 }}>
-      <Indent times={depth} />
-      <button onClick={() => onClick(tree.id)}>
-        Node {tree.id}
+      <div style={styles.nodeRow} onClick={() => onClick(tree.id)}>
+        <Indent times={depth} />
+        {tree.id === 0 ? 'Parent Node' : `Node ${tree.id}`}
         {selected}
-      </button>
-      <br />
+      </div>
       {tree.children &&
         tree.children.map(child => (
           <NodeTree
