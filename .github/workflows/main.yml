@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: sterlingwes/gh-pages-deploy-action@ef7231f5cbdbf2c626902ff7ff771f3add58665b
+      - uses: sterlingwes/gh-pages-deploy-action@4188b26312f276decb1a6ef6fc09b7030f7da291
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
           source-directory: playground-site
