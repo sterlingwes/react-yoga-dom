@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: sterlingwes/gh-pages-deploy-action
+      - uses: sterlingwes/gh-pages-deploy-action@fdabc58860f0433c5e36ebb07a92e11056fd9713
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
           source-directory: public
