@@ -5,11 +5,15 @@
   "types": "dist/index.d.ts",
   "author": "Wes Johnson <swj@wesquire.ca>",
   "license": "MIT",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "preinstall": "npm config set yoga-layout:platform standalone",
     "start": "concurrently \"yarn:lib-tsc\" \"yarn:serve\"",
     "serve": "`# 💁‍♀️\n` `# 🌎⏳ open http://localhost:8081 to view playground once webpack finishes` `#\n` `# 💁‍♂️\n` && PORT=8081 SRV=playground-site htmlsrv",
     "lib-tsc": "rimraf ./dist && tsc-watch --noClear --declaration -p ./src --onFirstSuccess \"yarn webpack-watch\"",
+    "build": "rimraf ./dist && tsc --declaration -p ./src",
     "webpack-watch": "webpack -w --config ./playground/webpack.config.js",
     "test-watch": "jest --watch",
     "build-playground": "tsc -p ./src && webpack --config ./playground/webpack.config.js"
