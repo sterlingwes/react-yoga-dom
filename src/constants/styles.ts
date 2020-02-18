@@ -44,6 +44,7 @@ export const REACT_SETTABLE_PROPERTIES = [
   'alignItems',
   'alignSelf',
   'aspectRatio',
+  'backgroundColor',
   'borderBottomWidth',
   'borderEndWidth',
   'borderLeftWidth',
