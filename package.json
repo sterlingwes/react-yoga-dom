@@ -12,17 +12,22 @@
     "lib-tsc": "rimraf ./dist && tsc-watch --noClear --declaration -p ./src --onFirstSuccess \"yarn webpack-watch\"",
     "webpack-watch": "webpack -w --config ./playground/webpack.config.js",
     "test-watch": "jest --watch",
-    "build-playground": "tsc -p ./src && webpack --config ./playground/webpack.config.js"
+    "test": "jest",
+    "build-playground": "tsc -p ./src && webpack --config ./playground/webpack.config.js",
+    "build-test-bundle": "yarn webpack --config src/integration-tests/webpack-test.config.js"
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",
+    "@types/puppeteer": "^1.20.2",
     "@types/react": "^16.9.11",
     "@types/react-reconciler": "^0.18.0",
     "@types/yoga-layout": "^1.9.1",
     "concurrently": "^5.0.0",
     "htmlsrv": "^1.2.1",
     "jest": "^24.9.0",
+    "jest-image-snapshot": "^2.11.1",
     "prettier": "^1.18.2",
+    "puppeteer": "^2.0.0",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
