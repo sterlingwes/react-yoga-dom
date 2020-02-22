@@ -7,12 +7,16 @@
  *
  */
 
+import decamelize from 'decamelize';
+
 import {
   MONOSPACE_FONT_STACK,
   SYSTEM_FONT_STACK,
   STYLE_SHORT_FORM_EXPANSIONS,
 } from './style-converter.constants';
 import { normalizeValueWithProperty } from './normalizer';
+
+const toCSSProp = (prop: string) => decamelize(prop, '-');
 
 /**
  * The browser implements the CSS cascade, where the order of properties is a
@@ -43,12 +47,12 @@ type RNStyleObj = {
   direction?: string;
   display?: string;
   flex?: number;
-  flexBasis?: string;
+  flexBasis?: string | number;
   flexShrink?: number;
   font?: string;
   fontFamily?: string;
   fontVariant?: string | Array<string>;
-  marginVertical?: number;
+  marginVertical?: string | number;
   opacity?: number;
   resizeMode?: string;
   shadowColor?: string;
@@ -118,6 +122,8 @@ export const convertReactNativeStyle = (style: RNStyleObj) => {
         return;
       }
 
+      const settableProp = toCSSProp(prop);
+
       switch (prop) {
         // Ignore some React Native styles
         case 'aspectRatio':
@@ -127,23 +133,51 @@ export const convertReactNativeStyle = (style: RNStyleObj) => {
         case 'tintColor':
 
         // Ignore properties handled by yoga
-        case 'width':
-        case 'height':
-        case 'minWidth':
-        case 'maxWidth':
-        case 'minHeight':
-        case 'maxHeight':
-        case 'justifyContent':
+        case 'alignContent':
         case 'alignItems':
         case 'alignSelf':
-        case 'alignContent':
+        case 'aspectRatio':
+        case 'bottom':
+        case 'direction':
+        case 'display':
+        case 'end':
+        case 'flex':
         case 'flexBasis':
+        case 'flexDirection':
         case 'flexGrow':
         case 'flexShrink':
-        case 'positionType':
-        case 'aspectRatio':
         case 'flexWrap':
-        case 'flexDirection': {
+        case 'height':
+        case 'justifyContent':
+        case 'left':
+        case 'margin':
+        case 'marginBottom':
+        case 'marginEnd':
+        case 'marginHorizontal':
+        case 'marginLeft':
+        case 'marginRight':
+        case 'marginStart':
+        case 'marginTop':
+        case 'marginVertical':
+        case 'maxHeight':
+        case 'maxWidth':
+        case 'minHeight':
+        case 'minWidth':
+        case 'padding':
+        case 'paddingBottom':
+        case 'paddingEnd':
+        case 'paddingHorizontal':
+        case 'paddingLeft':
+        case 'paddingRight':
+        case 'paddingStart':
+        case 'paddingTop':
+        case 'paddingVertical':
+        case 'position':
+        case 'right':
+        case 'start':
+        case 'top':
+        case 'width':
+        case 'zIndex': {
           break;
         }
 
@@ -153,7 +187,7 @@ export const convertReactNativeStyle = (style: RNStyleObj) => {
         }
 
         case 'font': {
-          resolvedStyle[prop] = value.replace('System', SYSTEM_FONT_STACK);
+          resolvedStyle[settableProp] = value.replace('System', SYSTEM_FONT_STACK);
           break;
         }
 
@@ -161,11 +195,11 @@ export const convertReactNativeStyle = (style: RNStyleObj) => {
           if (value.indexOf('System') > -1) {
             const stack = value.split(/,\s*/);
             stack[stack.indexOf('System')] = SYSTEM_FONT_STACK;
-            resolvedStyle[prop] = stack.join(',');
+            resolvedStyle[settableProp] = stack.join(',');
           } else if (value === 'monospace') {
-            resolvedStyle[prop] = MONOSPACE_FONT_STACK;
+            resolvedStyle[settableProp] = MONOSPACE_FONT_STACK;
           } else {
-            resolvedStyle[prop] = value;
+            resolvedStyle[settableProp] = value;
           }
           break;
         }
@@ -211,11 +245,11 @@ export const convertReactNativeStyle = (style: RNStyleObj) => {
               // The value of any longform property in the original styles takes
               // precedence over the shortform's value.
               if (typeof style[longForm] === 'undefined') {
-                resolvedStyle[longForm] = value;
+                resolvedStyle[toCSSProp(longForm)] = value;
               }
             });
           } else {
-            resolvedStyle[prop] = Array.isArray(value) ? value.join(',') : value;
+            resolvedStyle[settableProp] = Array.isArray(value) ? value.join(',') : value;
           }
         }
       }

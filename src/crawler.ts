@@ -1,7 +1,7 @@
-import Yoga, { YogaNode } from 'yoga-layout';
-import decamelize from 'decamelize';
+import { YogaNode } from 'yoga-layout';
 import { LayoutT, createLayout, RNStyleT } from './primitives';
 import { getFromRegistry } from './style-registry';
+import { convertReactNativeStyle } from './react-native/style-converter';
 
 const compact = (a: Array<LayoutT | undefined>) => a.filter(item => !!item);
 
@@ -38,71 +38,14 @@ type YogaNodeLayout = {
   height: number;
 };
 
-const YogaStyleAttributes = [
-  'alignContent',
-  'alignItems',
-  'alignSelf',
-  'aspectRatio',
-  'borderBottomWidth',
-  'borderEndWidth',
-  'borderLeftWidth',
-  'borderRightWidth',
-  'borderStartWidth',
-  'borderTopWidth',
-  'borderWidth',
-  'bottom',
-  'direction',
-  'display',
-  'end',
-  'flex',
-  'flexBasis',
-  'flexDirection',
-  'flexGrow',
-  'flexShrink',
-  'flexWrap',
-  'height',
-  'justifyContent',
-  'left',
-  'margin',
-  'marginBottom',
-  'marginEnd',
-  'marginHorizontal',
-  'marginLeft',
-  'marginRight',
-  'marginStart',
-  'marginTop',
-  'marginVertical',
-  'maxHeight',
-  'maxWidth',
-  'minHeight',
-  'minWidth',
-  'overflow',
-  'padding',
-  'paddingBottom',
-  'paddingEnd',
-  'paddingHorizontal',
-  'paddingLeft',
-  'paddingRight',
-  'paddingStart',
-  'paddingTop',
-  'paddingVertical',
-  'position',
-  'right',
-  'start',
-  'top',
-  'width',
-  'zIndex',
-];
-
 const applyCssStyles = (node: HTMLElement) => {
-  const cssStyle = getStyleFromNode(node);
-  if (cssStyle) {
+  const rnStyle = getStyleFromNode(node);
+  if (rnStyle) {
+    const cssStyle = convertReactNativeStyle(rnStyle);
     // TODO: do the filtering when styles are first registered
-    Object.keys(cssStyle)
-      .filter(attribute => YogaStyleAttributes.includes(attribute) === false)
-      .forEach(attribute => {
-        node.style.setProperty(decamelize(attribute, '-'), cssStyle[attribute]);
-      });
+    Object.keys(cssStyle).forEach(attribute => {
+      node.style.setProperty(attribute, cssStyle[attribute]);
+    });
   }
 };
 
