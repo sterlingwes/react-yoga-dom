@@ -37,6 +37,7 @@
     "webpack-livereload-plugin": "^2.2.0"
   },
   "dependencies": {
+    "normalize-css-color": "^1.0.2",
     "react": "^16.11.0",
     "react-dom": "16.4.2",
     "react-reconciler": "^0.23.0",

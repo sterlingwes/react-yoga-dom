@@ -9,6 +9,7 @@ type YogaSettableProperty =
   | 'alignItems'
   | 'alignSelf'
   | 'alignContent'
+  | 'flexBasis'
   | 'flexGrow'
   | 'flexShrink'
   | 'positionType'
@@ -27,6 +28,7 @@ export const YOGA_SETTABLE_PROPERTIES: YogaSettableProperty[] = [
   'alignItems',
   'alignSelf',
   'alignContent',
+  'flexBasis',
   'flexGrow',
   'flexShrink',
   'positionType',

@@ -65,6 +65,10 @@ export const createYogaNodes = (layout: LayoutT): YogaNode => {
       case 'alignContent':
         layout.alignContent && root.setAlignContent(layout.alignContent);
         break;
+      case 'flexBasis':
+        if (layout.flexBasis === 'auto') break;
+        layout.flexBasis && root.setFlexBasis(layout.flexBasis);
+        break;
       case 'flexGrow':
         layout.flexGrow && root.setFlexGrow(layout.flexGrow);
         break;
