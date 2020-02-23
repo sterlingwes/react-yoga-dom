@@ -67,7 +67,7 @@ const hostConfig = {
     return document.createTextNode(text);
   },
   createInstance: (type, newProps, rootContainerInstance, _currentHostContext, workInProgress) => {
-    const instance = new ProxyDomNode('div');
+    const instance = new ProxyDomNode(type);
     const domElement = instance.element;
     setProps(instance, newProps);
     return instance;

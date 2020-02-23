@@ -16,6 +16,7 @@
     "build": "rimraf ./dist && tsc --declaration -p ./src",
     "webpack-watch": "webpack -w --config ./playground/webpack.config.js",
     "test-watch": "jest --watch",
+    "dbuild": "yarn build && yalc push",
     "build-playground": "tsc -p ./src && webpack --config ./playground/webpack.config.js"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "webpack-livereload-plugin": "^2.2.0"
   },
   "dependencies": {
+    "@types/node": "^13.7.4",
     "normalize-css-color": "^1.0.2",
     "react": "^16.11.0",
     "react-dom": "16.4.2",

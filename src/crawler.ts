@@ -51,6 +51,9 @@ const applyCssStyles = (node: HTMLElement) => {
 
 const applyLayoutStyles = (node: HTMLElement, style: YogaNodeLayout) => {
   node.style.setProperty('position', 'absolute');
+  if (node.tagName === 'IMG' && !style.width) {
+    delete style.width; // allow img src to define width when not explicitly set
+  }
   Object.keys(style).forEach(key => {
     if (key === 'height' && !style[key]) return;
     if (key === 'bottom' || key === 'right') return;
